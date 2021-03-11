@@ -1,3 +1,12 @@
 worcs_version: 0.1.8
 creator: Lissa102
 entry_point: manuscript/manuscript.Rmd
+data:
+  df.csv:
+    save_expression: write.csv(x = data, file = filename, row.names = FALSE)
+    load_expression: read.csv(file = filename, stringsAsFactors = TRUE)
+    synthetic: synthetic_df.csv
+    codebook: codebook_df.Rmd
+checksums:
+  df.csv: ef5f289344043417aa6ebe1675201526
+  synthetic_df.csv: 28b7ef10ec741b6a948aefcf31390526
