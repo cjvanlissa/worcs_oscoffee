@@ -1,6 +1,6 @@
 ---
 title: "Untitled"
-output: github_document
+output: bookdown::pdf_document2
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 bibliography: references.bib
 knit: worcs::cite_all
@@ -12,13 +12,13 @@ library("worcs")
 # and end that file with either open_data(yourdata), or closed_data(yourdata).
 # Then, uncomment the line below to load the original or synthetic data
 # (whichever is available), to allow anyone to reproduce your code:
-# load_data()
-knitr::opts_chunk$set(echo = TRUE)
+load_data()
+knitr::opts_chunk$set(echo = FALSE, wawarning = FALSE, message= FALSE)
 ```
 
 This manuscript uses the Workflow for Open Reproducible Code in Science [@vanlissaWORCSWorkflowOpen2020] to ensure reproducibility and transparency. All code <!--and data--> are available at <git@github.com:cjvanlissa/worcs_oscoffee.git>.
 
-This is an example of a non-essential citation [@@vanlissaWORCSWorkflowOpen2020]. If you change the rendering function to `worcs::cite_essential`, it will be removed.
+This is an example of a non-essential citation [@vanlissaWORCSWorkflowOpen2020]. If you change the rendering function to `worcs::cite_essential`, it will be removed.
 
 <!--The function below inserts a notification if the manuscript is knit using synthetic data. Make sure to insert it after load_data().-->
 `r notify_synthetic()`
@@ -32,15 +32,33 @@ This is an R Markdown format used for publishing markdown documents to GitHub. W
 You can include R code in the document as follows:
 
 ```{r cars}
-summary(cars)
+library(tidySEM)
+library(lavaan)
+tab_desc <- descriptives(df)
+knitr::kable(tab_desc)
 ```
 
-## Including Plots
+## Analysis
 
-You can also embed plots, for example:
+```{r}
+mod <- "
+vis =~ vis_1 + vis_2 + vis_3
+tex =~ tex_1 + tex_2 + tex_3
+speed =~ spe_1 + spe_2 + spe_3
+"
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+res <- cfa(mod, df)
+knitr::kable(table_results(res, columns = c("mplus_label", "est_sig", 
+"confint", "est_std", "confint_std")))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Picture
+
+```{r tmp, fig.cap="Bla"}
+lay <- get_layout("",       "tex",    "",       "",     "vis",   "",     ""   , "speed", "", 
+                  "tex_1", "tex_2", "tex_3", "vis_1", "vis_2", "vis_3","spe_1", "spe_2", "spe_3",
+                  rows = 2)
+graph_sem(res, layout = lay, fix_coord = TRUE)
+```
+
+

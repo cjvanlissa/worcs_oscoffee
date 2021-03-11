@@ -4,3 +4,9 @@
 # to store the data.
 
 library(worcs)
+library(foreign)
+df <- read.spss("c:/tmp/worcs.sav", to.data.frame = TRUE)
+
+df[["id"]] <- NULL
+
+closed_data(df)
